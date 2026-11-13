@@ -51,8 +51,13 @@ remove(){
   if [[ $# != 2  ]]; then
     handleErr "-r" 1 $(($# - 1))
   fi
-  id=$2
-  echo "Removing item with id: $id"
+  target=$2
+  #Remove the item
+  sed -i "/$target/d" todolist.txt
+  sed -i "/$target/d" status.txt
+  #Update the ids
+  awk -v target=$target '{ if($1 > target) $1=$1-1"."; print $0}' todolist.txt > tmp && mv tmp todolist.txt
+  awk -v target=$target '{ if($1 > target) $1=$1-1; print $0}' status.txt > tmp && mv tmp status.txt
   return 0
 }
 
