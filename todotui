@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+list(){
+  echo "List all items"
+  return 1
+}
+
+add(){
+  item=$1
+  echo "Adding item: $item"
+  return 1
+}
+
+remove(){
+  id=$1
+  echo "Removing item with id: $id"
+  return 1
+}
+
+mark(){
+  id=$1
+  echo "Item $id done!"
+  return 1
+}
+
+#Driver
+option=$1
+case "$option" in
+  "-v")
+    list
+    ;;
+  "-a")
+    add "$2"
+    ;;
+  
+  "-r")
+    remove "$2"
+    ;;
+  
+  "-m")
+    mark "$2"
+    ;;
+esac
