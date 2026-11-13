@@ -1,43 +1,59 @@
 #!/usr/bin/env bash
 
+handleErr(){
+  echo "Error: option $1 expected $2 arguments but got $3"
+  exit 1
+}
+
 list(){
+  if [[ $# > 1  ]]; then
+    handleErr "-v" 0 $(($# - 1))
+  fi
   echo "List all items"
-  return 1
+  return 0
 }
 
 add(){
-  item=$1
+  if [[ $# != 2  ]]; then
+    handleErr "-a" 1 $(($# - 1))
+  fi
+  item=$2
   echo "Adding item: $item"
-  return 1
+  return 0
 }
 
 remove(){
-  id=$1
+  if [[ $# != 2  ]]; then
+    handleErr "-r" 1 $(($# - 1))
+  fi
+  id=$2
   echo "Removing item with id: $id"
-  return 1
+  return 0
 }
 
 mark(){
-  id=$1
+  if [[ $# != 2  ]]; then
+    handleErr "-m" 1 $(($# - 1))
+  fi
+  id=$2
   echo "Item $id done!"
-  return 1
+  return 0
 }
 
 #Driver
-option=$1
-case "$option" in
+case "$1" in
   "-v")
-    list
+    list "$@"
     ;;
   "-a")
-    add "$2"
+    add "$@"
     ;;
   
   "-r")
-    remove "$2"
+    remove "$@"
     ;;
   
   "-m")
-    mark "$2"
+    mark "$@"
     ;;
 esac
