@@ -1,0 +1,24 @@
+FUNCTIONAL REQUIREMENTS:
+  FR01 ADD_ITEM
+  FR02 MARK_ITEM_AS_DONE
+  FR03 REMOVE_ITEM
+  FR04 VIEW_LIST
+
+FR DESCRIPTION:
+  FR01: User should be able to add an item with the following usage:
+        todo -a [item]
+  FR02: User should be able to mark an existing item as done with the following usage:
+        todo -m [item-id]
+  FR03: User should be able to remove an item with the following usage:
+        todo -r [item-id] 
+  FR04: User should be able to view the list of items with the following usage:
+        todo [-v]
+
+DRIVER:
+  Read the list of arguments and call the appropriate function
+
+FUNCTION_NAME	IMPLEMENTS	DESCRIPTION
+list()		FR04		reads from todolist.txt and prints out it's contents
+add(item)	FR01		writes item to todolist.txt with a progressive id
+remove(id)	FR03		removes the item from todolist.txt corresponding to id, rearranges the id after removal
+mark(id)	FR		marks the item from todolist.txt corresponding to id as done
