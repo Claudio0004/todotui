@@ -22,3 +22,16 @@ list()		FR04		reads from todolist.txt and prints out it's contents
 add(item)	FR01		writes item to todolist.txt with a progressive id
 remove(id)	FR03		removes the item from todolist.txt corresponding to id, rearranges the id after removal
 mark(id)	FR		marks the item from todolist.txt corresponding to id as done
+
+
+The program mantains two files: todolist.txt and status.txt. todolist.txt contains the
+numbered items added by the user, status.txt contains the status of each item in the
+format [id]: [status] where status is either 0 or 1.
+
+When the user adds an item, the program generates a progressive id and appends the item to 
+todolist.txt and appends the id to status with status 0.
+When the user marks an item, the program filps the corresponding id's status in status.txt.
+When the user removes an item, the program eliminates the corresponding row from both .txt 
+files and shift all of the items that come after by one position.
+When the user lists the item, the program outputs todolist.txt with the makred items 
+crossed out according to status.txt
