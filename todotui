@@ -52,9 +52,18 @@ remove(){
     handleErr "-r" 1 $(($# - 1))
   fi
   target=$2
+
+  #Check if item in list
+  last=`awk 'END{print $1}' todolist.txt 2>/dev/null | cut -c 1`
+  if [[ $target > $last  ]]; then
+    echo "Error: no item corresponding to number $target"
+    return 1
+  fi
+
   #Remove the item
   sed -i "/$target/d" todolist.txt
   sed -i "/$target/d" status.txt
+
   #Update the ids
   awk -v target=$target '{ if($1 > target) $1=$1-1"."; print $0}' todolist.txt > tmp && mv tmp todolist.txt
   awk -v target=$target '{ if($1 > target) $1=$1-1; print $0}' status.txt > tmp && mv tmp status.txt
