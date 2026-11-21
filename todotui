@@ -82,6 +82,12 @@ mark(){
   return 0
 }
 
+clear(){
+  rm todolist.txt status.txt
+  echo "Todo list cleared!"
+  return 0
+}
+
 #Driver
 case "$1" in
   "-v")
@@ -97,5 +103,9 @@ case "$1" in
   
   "-m")
     mark "$@"
+    ;;
+
+  "-c")
+    clear
     ;;
 esac
