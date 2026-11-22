@@ -56,10 +56,18 @@ main(){
   init_tui
   draw_items
   local cmd
-  while read -srn 1 cmd; do
+  [ -f debug.txt ] && rm debug.txt
+  while read -sn 1 cmd; do
     if [[ "$cmd" == "q"  ]]; then
       exit_tui
       break
+    elif [[ "$cmd" == "["  ]]; then
+      read -n 1 next
+      if [[ "$next" == "A"  ]]; then
+        printf "\e[1A"
+      elif [[ "$next" == "B"  ]]; then
+        printf "\e[1B"
+      fi
     fi
   done
 }
