@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-declare -A status
+declare -a status=()
 declare -a items=()
 declare item_count
 declare position
@@ -31,7 +31,7 @@ load_items(){
   while read -r line; do
      val=$(echo "$line" | cut -c 3)
      id=$(echo "$line" | cut -c 1)
-     status["$id"]="$val"
+     status+="$val"
   done < <(cat status.txt)
 
   #Populate array for each item
@@ -41,7 +41,7 @@ load_items(){
   done < <(cat todolist.txt)
 
   item_count=${#items[@]}
-  position=$(( $item_count + 1 ))
+  position=$(( $item_count ))
 
   return 0
 }
@@ -51,13 +51,13 @@ draw_items(){
 
   #Print out the completed tasks as crossed text
   for i in "${!items[@]}"; do
-    id=$(($i + 1))
-    if [[ "${status["$id"]}" == "1"  ]]; then
-      echo -e "\e[9m$id. ${items[i]}\e[0m"
+    if [[ "${status["$i"]}" == "1"  ]]; then
+      echo -e "\e[9m$i. ${items[i]}\e[0m"
     else
-      echo "$id. ${items[i]}"
+      echo "$i. ${items[i]}"
     fi
   done
+  echo ""
 
   #Reset cursor position
   for ((i=position; i<=item_count; i++)); do
@@ -68,7 +68,7 @@ draw_items(){
 }
 
 move_up(){
-  if [[ $position > 1 ]]; then
+  if [[ $position > 0 ]]; then
     printf "\e[1A"
     position=$(( $position - 1  ))
   fi
@@ -77,7 +77,7 @@ move_up(){
 }
 
 move_down(){
-  if [[ $position < $(( $item_count + 1 ))  ]]; then
+  if [[ $position < $(( $item_count ))  ]]; then
     printf "\e[1B"
     position=$(( $position + 1 ))
   fi
