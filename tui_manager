@@ -2,7 +2,8 @@
 
 declare -A status
 declare -a items=()
-
+declare item_count
+declare position
 
 init_tui(){
 #  printf '\e7' # save cursor position
@@ -35,6 +36,9 @@ load_items(){
     items+=("$item")
   done < <(cat todolist.txt)
 
+  item_count=${#items[@]}
+  position=$(( $item_count + 1 ))
+   
   return 0
 }
 
@@ -52,21 +56,35 @@ draw_items(){
   done
 }
 
+move_up(){
+  if [[ $position > 1 ]]; then
+    printf "\e[1A"
+    position=$(( $position - 1  ))
+  fi
+}
+
+move_down(){
+  if [[ $position < $(( $item_count + 1 ))  ]]; then
+    printf "\e[1B"
+    position=$(( $position + 1 ))
+  fi
+}
+
 main(){
   init_tui
   draw_items
+
   local cmd
-  [ -f debug.txt ] && rm debug.txt
   while read -sn 1 cmd; do
     if [[ "$cmd" == "q"  ]]; then
       exit_tui
       break
-    elif [[ "$cmd" == "["  ]]; then
+    elif [[ "$cmd" == "["  ]]; then # detect arrow keypress
       read -n 1 next
       if [[ "$next" == "A"  ]]; then
-        printf "\e[1A"
+        move_up
       elif [[ "$next" == "B"  ]]; then
-        printf "\e[1B"
+        move_down
       fi
     fi
   done
