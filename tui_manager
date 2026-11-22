@@ -58,7 +58,10 @@ draw_items(){
       echo "$id. ${items[i]}"
     fi
   done
-  echo ""
+  #Only print the extra line if there is at list one item in the list, so as to not have two blank lines on an empty list
+  if (( ${#items[@]} != 0  )); then
+    echo ""
+  fi
 
   #Reset cursor position
   for ((i=position; i<=item_count; i++)); do
@@ -104,9 +107,9 @@ clear(){
   status=()
   items=()
   item_count=0
-  position=1
 
   draw_items
+  position=1
 
   return 0
 }
