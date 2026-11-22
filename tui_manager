@@ -47,7 +47,7 @@ load_items(){
 }
 
 draw_items(){
-  printf '\e[H\eJ'
+  printf '\e[H\e[J'
 
   #Print out the completed tasks as crossed text
   for i in "${!items[@]}"; do
@@ -99,6 +99,25 @@ mark(){
   return 0
 }
 
+clear(){
+  status=()
+  items=()
+  item_count=0
+  position=1
+
+  draw_items
+
+  return 0
+}
+
+remove(){
+  echo "remove"
+}
+
+commit(){
+ echo "commit"
+}
+
 main(){
   init_tui
   draw_items
@@ -110,6 +129,8 @@ main(){
       break
     elif [[ "$cmd" == "m" ]]; then
       mark
+    elif [[ "$cmd" == "c" ]]; then
+      clear
     elif [[ "$cmd" == "["  ]]; then # detect arrow keypress
       read -n 1 next
       if [[ "$next" == "A"  ]]; then
