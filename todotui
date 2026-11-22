@@ -125,4 +125,7 @@ case "$1" in
   "-c")
     clear
     ;;
+
+  "-g" | "")
+    bash tui_manager
 esac
