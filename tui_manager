@@ -31,7 +31,7 @@ load_items(){
   while read -r line; do
      val=$(echo "$line" | cut -c 3)
      id=$(echo "$line" | cut -c 1)
-     status+="$val"
+     status+=("$val")
   done < <(cat status.txt)
 
   #Populate array for each item
@@ -51,10 +51,11 @@ draw_items(){
 
   #Print out the completed tasks as crossed text
   for i in "${!items[@]}"; do
-    if [[ "${status["$i"]}" == "1"  ]]; then
-      echo -e "\e[9m$i. ${items[i]}\e[0m"
+    id=$((i + 1))
+    if [[ "${status[$i]}" == "1"  ]]; then
+      echo -e "\e[9m$id. ${items[i]}\e[0m"
     else
-      echo "$i. ${items[i]}"
+      echo "$id. ${items[i]}"
     fi
   done
   echo ""
@@ -123,7 +124,17 @@ remove(){
 }
 
 commit(){
- echo "commit"
+  #Update todolist.txt
+  rm todolist.txt
+  for i in "${!items[@]}"; do
+    echo "$i. ${items[$i]}" >> todolist.txt
+  done
+
+  #Update status.txt
+  rm status.txt
+  for i in "${!status[@]}"; do
+    echo "$i ${status[$i]}" >> status.txt
+  done
 }
 
 main(){
@@ -141,6 +152,8 @@ main(){
       clear
     elif [[ "$cmd" == "r" ]]; then
       remove
+    elif [[ "$cmd" == "s" ]]; then
+      commit
     elif [[ "$cmd" == "["  ]]; then # detect arrow keypress
       read -n 1 next
       if [[ "$next" == "A"  ]]; then
