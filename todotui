@@ -46,7 +46,6 @@ add(){
   
   #Get progressive id from todolist.txt
   id=`awk 'END{print $1}' todolist.txt 2>/dev/null | cut -c 1`
-  echo $id
   if [[ -z "$id" ]]; then
     id="-1"
   fi
