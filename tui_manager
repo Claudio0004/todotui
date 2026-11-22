@@ -111,7 +111,15 @@ clear(){
 }
 
 remove(){
-  echo "remove"
+  unset items[$position]
+  unset status[$position]
+  items=("${items[@]}")
+  status=("${status[@]}")
+
+  item_count=$(($item_count-1))
+  draw_items
+
+  return 0
 }
 
 commit(){
@@ -131,6 +139,8 @@ main(){
       mark
     elif [[ "$cmd" == "c" ]]; then
       clear
+    elif [[ "$cmd" == "r" ]]; then
+      remove
     elif [[ "$cmd" == "["  ]]; then # detect arrow keypress
       read -n 1 next
       if [[ "$next" == "A"  ]]; then
