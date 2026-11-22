@@ -3,13 +3,17 @@
 declare -A status
 declare -a items=()
 
+
 init_tui(){
+#  printf '\e7' # save cursor position
+#  printf '\e[H' # move cursor to home position
   printf '\e[?1049h' # enter the alternate screen
   load_items
 }
 
 exit_tui(){
   printf '\e[?1049l' # exit the alternate screen
+#  printf '\e8' # restore cursor position
 }
 
 load_items(){
@@ -34,8 +38,23 @@ load_items(){
   return 0
 }
 
+draw_items(){
+  printf '\e[H'
+
+  #Print out the completed tasks as crossed text
+  for i in "${!items[@]}"; do
+    id=$(($i + 1))
+    if [[ "${status["$id"]}" == "1"  ]]; then
+      echo -e "\e[9m$id. ${items[i]}\e[0m"
+    else
+      echo "$id. ${items[i]}"
+    fi
+  done
+}
+
 main(){
   init_tui
+  draw_items
   local cmd
   while read -srn 1 cmd; do
     if [[ "$cmd" == "q"  ]]; then
