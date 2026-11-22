@@ -27,10 +27,12 @@ list(){
   #Print out the completed tasks as crossed text
   while read -r line; do
     id=$(echo "$line" | cut -c 1)
+    item=$(echo "$line" | cut -c 4-)
+    print_id=$(($id+1))
     if [[ "${status["$id"]}" == "1"  ]]; then
-      echo -e "\e[9m$line\e[0m"
+      echo -e "\e[9m$print_id. $item\e[0m"
     else
-      echo "$line"
+      echo "$print_id. $item"
     fi
   done < <(cat todolist.txt)
 
@@ -43,8 +45,11 @@ add(){
   fi
   
   #Get progressive id from todolist.txt
-  id=0
   id=`awk 'END{print $1}' todolist.txt 2>/dev/null | cut -c 1`
+  echo $id
+  if [[ -z "$id" ]]; then
+    id="-1"
+  fi
 
   #N. foo bar baz
   item="$((id + 1)). $2"
@@ -57,12 +62,12 @@ remove(){
   if [[ $# != 2  ]]; then
     handleErr "-r" 1 $(($# - 1))
   fi
-  target=$2
+  target=$(($2-1))
 
   #Check if item in list
   last=`awk 'END{print $1}' todolist.txt 2>/dev/null | cut -c 1`
   if [[ $target > $last  ]]; then
-    echo "Error: no item corresponding to number $target"
+    echo "Error: no item corresponding to number $2"
     return 1
   fi
 
@@ -80,12 +85,12 @@ mark(){
   if [[ $# != 2  ]]; then
     handleErr "-m" 1 $(($# - 1))
   fi
-  id=$2
+  id=$(($2-1))
 
   #Get the status
   old=$(awk -v id="$id" '($1==id) {print $2}' status.txt 2>/dev/null)
   if [[ -z "$old" ]]; then
-    echo "Item $id not found"
+    echo "Item $2 not found"
     exit 1
   fi
 
@@ -95,7 +100,7 @@ mark(){
     new="1"
   fi
   sed -i "s/$id $old/$id $new/" status.txt
-  [[ "$new" == "1"  ]] && echo "Item $id done!" || echo "Item $id un-checked!"
+  [[ "$new" == "1"  ]] && echo "Item $2 done!" || echo "Item $2 un-checked!"
   return 0
 }
 
