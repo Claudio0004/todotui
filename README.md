@@ -1,5 +1,5 @@
 # Todotui
-Todotui is a CLI todo list that allows the user to view, add, remove and mark items as completed. Despite it's name, the current version does not support
+Todotui is a CLI todo list that allows the user to view, add, remove and mark items as completed. Despite its name, the current version does not support
 a terminal user interface (TUI). The next step in this project is to add a TUI that allows the user to manage a todo list via both text editing and 
 keyboard commands (e.g. Ctrl+M to mark item as completed).
 
